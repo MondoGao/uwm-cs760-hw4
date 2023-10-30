@@ -182,7 +182,12 @@ $$\E[c_{x \hat x}]$$
 Derive your optimal prediction $\hat x$.
 
 \begin{soln}
-	todo
+	\begin{align*}
+		\hat x           & = \argmin_{\hat x} \E[c_{x \hat x}]                                                \\
+		\E[c_{x \hat x}] & = \sum_{i=1}^{k} \sum_{j=1}^{k} c_{ij} \cdot P(x = i, \hat{x} = j)                 \\
+		                 & = \sum_{i=1}^{k} \sum_{j=1}^{k} c_{ij} \cdot P(x = i) \cdot P(\hat{x} = j | x = i) \\
+		                 & = \sum_{i=1}^{k} \sum_{j=1}^{k} c_{ij} \cdot \theta_i \cdot P(\hat{x} = j | x = i) 
+	\end{align*}
 \end{soln}
 
 
