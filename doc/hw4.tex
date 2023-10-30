@@ -138,7 +138,37 @@ using the following two prediction strategies respectively?  Prove your answer.
 
 Strategy 1: $\hat x \in \argmax_x \theta_x$, the outcome with the highest probability.
 
+\begin{soln}
+	Let $\hat \theta    = \max_i \theta_i $ (biggest probability in $\theta$, if there is multiple max, pick use the same rule as we pick $\hat x$)
+	\begin{align*}
+		P(\hat{x} = x)    & = \hat \theta     \\
+		P(\hat{x} \neq x) & = 1 - \hat \theta
+	\end{align*}
+
+	Therefore
+	\[
+		\E[\ind_{\hat x \neq x}] = 1 \cdot P(\hat{x} \neq x) + 0 \cdot P(\hat{x} = x) = 1 - \hat \theta
+	\]
+\end{soln}
+
 Strategy 2: You mimic the world by generating a prediction $\hat x \sim \mbox{multinomial}(\theta)$.  (Hint: your randomness and the world's randomness are independent)
+
+\begin{soln}
+	Because the prediction and the world's randomness are independent, we have
+	\begin{align*}
+		P(\hat{x} = x)    & = \sum_{i=1}^{k} P(\hat{x} = i | x = i)              \\
+		                  & = \sum_{i=1}^{k}  P(\hat{x} = i) \cdot P(x = i)      \\
+		                  & = \sum_{i=1}^{k} \theta_i \cdot \theta_i             \\
+		                  & = \sum_{i=1}^{k} \theta_i^2                          \\
+		P(\hat{x} \neq x) & = 1 - P(\hat{x} = x) = 1 - \sum_{i=1}^{k} \theta_i^2
+	\end{align*}
+	Therefore
+	\begin{align*}
+		\E[\ind_{\hat x \neq x}] & = 1 - P(\hat{x} = x)            \\
+		                         & = 1 - \sum_{i=1}^{k} \theta_i^2
+	\end{align*}
+
+\end{soln}
 
 
 \section{Best Prediction Under Different Misclassification Losses (6 pts)}
@@ -150,6 +180,10 @@ This is a way to generalize different costs on false positives vs false negative
 You want to minimize your expected loss:
 $$\E[c_{x \hat x}]$$
 Derive your optimal prediction $\hat x$.
+
+\begin{soln}
+	todo
+\end{soln}
 
 
 \section{Language Identification with Naive Bayes (8 pts each)}
