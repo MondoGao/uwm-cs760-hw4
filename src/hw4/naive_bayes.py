@@ -41,11 +41,14 @@ class NaiveBayes:
         for d in data:
             label_idx = d[0]
             label_count[label_idx] += 1
+
             char_count_by_label[label_idx, :] += d[1:]
 
         # prior
         self.label_prob = label_count / np.sum(label_count)
-        self.char_prob = char_count_by_label / np.sum(char_count_by_label, axis=0)
+
+        char_sum = np.sum(char_count_by_label, axis=1)
+        self.char_prob = char_count_by_label / char_sum.reshape(-1, 1)
 
     # Define the prediction function
     def predict(self, X_test):
@@ -68,4 +71,4 @@ class NaiveBayes:
 
         pred = self.labels[np.argmax(probs)]
         print(f"probs: {probs}, pred: {pred}")
-        return pred 
+        return pred
