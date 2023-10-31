@@ -16,8 +16,7 @@ def main():
 
     nb = NaiveBayes(characters=characters, labels=short_labels, use_log_prob=True)
     nb.load_and_train(files=train_files)
-    X_test = nb.file_to_characters(f"{data_dir}e10.txt")
-    nb.predict(X_test=X_test[1:])
+    nb.predict_by_file(f"{data_dir}e10.txt")
 
 
 if __name__ == "__main__":

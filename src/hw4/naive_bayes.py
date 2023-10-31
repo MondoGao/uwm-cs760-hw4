@@ -50,6 +50,10 @@ class NaiveBayes:
         char_sum = np.sum(char_count_by_label, axis=1)
         self.char_prob = char_count_by_label / char_sum.reshape(-1, 1)
 
+    def predict_by_file(self, file_path):
+        X_test = self.file_to_characters(file_path)
+        return self.predict(X_test=X_test[1:])
+
     # Define the prediction function
     def predict(self, X_test):
         probs = np.zeros(len(self.labels))
@@ -65,10 +69,7 @@ class NaiveBayes:
                         self.char_prob[label_idx, char_idx]
                     )
                 else:
-                    probs[label_idx] = (
-                        np.prod(X_test * self.char_prob[label_idx, :])
-                        * self.label_prob[label_idx]
-                    )
+                    probs[label_idx] *= self.char_prob[label_idx, char_idx] ** char_num
 
         pred = self.labels[np.argmax(probs)]
         print(f"probs: {probs}, pred: {pred}")
