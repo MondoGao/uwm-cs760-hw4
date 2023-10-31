@@ -66,5 +66,6 @@ class NaiveBayes:
                 * self.label_prob[label_idx]
             )
 
-        print(probs)
-        return probs
+        pred = self.labels[np.argmax(probs)]
+        print(f"probs: {probs}, pred: {pred}")
+        return pred 
