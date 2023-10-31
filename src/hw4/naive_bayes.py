@@ -55,19 +55,20 @@ class NaiveBayes:
         probs = np.zeros(len(self.labels))
 
         for label_idx, label in enumerate(self.labels):
-            # if self.use_log_prob:
-            # probs[label_idx] = np.sum(
-            #     X_test * np.log(self.char_prob[label_idx, :])
-            #     + (1 - X_test) * np.log(1 - self.char_prob[label_idx, :])
-            # ) + np.log(self.label_prob[label_idx])
-            # else:
-            probs[label_idx] = (
-                np.prod(
-                    X_test * self.char_prob[label_idx, :]
-                    + (1 - X_test) * (1 - self.char_prob[label_idx, :])
-                )
-                * self.label_prob[label_idx]
-            )
+            probs[label_idx] = self.label_prob[label_idx]
+            if self.use_log_prob:
+                probs[label_idx] = np.log(probs[label_idx])
+
+            for char_idx, char_num in enumerate(X_test):
+                if self.use_log_prob:
+                    probs[label_idx] += char_num * np.log(
+                        self.char_prob[label_idx, char_idx]
+                    )
+                else:
+                    probs[label_idx] = (
+                        np.prod(X_test * self.char_prob[label_idx, :])
+                        * self.label_prob[label_idx]
+                    )
 
         pred = self.labels[np.argmax(probs)]
         print(f"probs: {probs}, pred: {pred}")
