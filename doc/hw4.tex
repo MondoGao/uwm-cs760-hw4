@@ -348,9 +348,36 @@ Suppose $x \in \mathbb{R}^d$, $W_1 \in \mathbb{R}^{d_1 \times d}$, and $W_2 \in 
 \]
 
 \begin{enumerate}
+	\pagebreak
 	\item Derive backpropagation updates for the above neural network. (5 pts)
 
 	      \begin{soln}
+		      From the question, we have
+		      \begin{align*}
+			      \hat{y} & = g(z^{(2)})      \\
+			      z^{(2)} & = W_2h            \\
+			      h       & = \sigma(z^{(1)}) \\
+			      z^{(1)} & = W_1x
+		      \end{align*}
+		      Because we use $(x, y)$ with one-hot encoded vector for $y$, we have \footnote{These are from lecture slides 9 page 45}
+		      \begin{align*}
+			      L(x, y)                             & = -y\log(\hat{y}) - (1-y)\log(1-\hat{y})     \\
+			      \frac{\partial L}{\partial \hat{y}} & = -\frac{y}{\hat{y}} + \frac{1-y}{1-\hat{y}} \\
+		      \end{align*}
+		      Then because we're using sigmoid activation function, we have
+		      \begin{align*}
+			      \frac{\partial z^{(2)}}{\partial W_2}      & = h                                                                                      \\
+			      \frac{\partial z^{(2)}}{\partial h}        & = W_2                                                                                    \\
+			      \frac{\partial z^{(1)}}{\partial W_1}      & = x                                                                                      \\
+			      \frac{\partial \hat y}{\partial z_i^{(2)}} & =\frac{\partial g(z_i^{(2)})}{\partial z_i^{(2)}}  = g(z_i^{(2)})(1-g(z_i^{(2)}))        \\
+			      \frac{\partial \sigma(z)}{\partial z}      & = \sigma(z)(1-\sigma(z))                                                                 \\
+			      \frac{\partial h}{\partial z^{(1)}}        & = \frac{\partial \sigma(z^{(1)})}{\partial z^{(1)}} = \sigma(z^{(1)})(1-\sigma(z^{(1)}))
+		      \end{align*}
+		      Apply chain rule,
+		      \begin{align*}
+			      \frac{\partial L}{\partial W_2} & = \frac{\partial L}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial z^{(2)}} \cdot \frac{\partial z^{(2)}}{\partial W_2}                                                                                     \\
+			      \frac{\partial L}{\partial W_1} & = \frac{\partial L}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial z^{(2)}} \cdot \frac{\partial z^{(2)}}{\partial h} \cdot \frac{\partial h}{\partial z^{(1)}} \cdot \frac{\partial z^{(1)}}{\partial W_1} \\
+		      \end{align*}
 	      \end{soln}
 
 	\item Implement it in NumPy or PyTorch using basic linear algebra operations. (e.g. You are not allowed to use auto-grad, built-in optimizer, model, etc. in this step. You can use library functions for data loading, processing, etc.). Evaluate your implementation on MNIST dataset, report test errors and learning curve. (10 pts)
