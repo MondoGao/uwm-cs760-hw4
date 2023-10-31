@@ -65,7 +65,7 @@ class NaiveBayes:
 
     def predict(self, X_test):
         # multiply / add prior after, needed by q
-        probs = np.full((len(self.labels)), 1)
+        probs = np.full((len(self.labels)), 1, dtype=float)
         if self.use_log_prob:
             probs = np.zeros((len(self.labels)))
 
@@ -78,7 +78,8 @@ class NaiveBayes:
                         self.char_prob[label_idx, char_idx]
                     )
                 else:
-                    probs[label_idx] *= self.char_prob[label_idx, char_idx] ** char_num
+                    next = self.char_prob[label_idx, char_idx] ** char_num
+                    probs[label_idx] *= next
 
             self.likelihood[label_idx] = probs[label_idx]
 
