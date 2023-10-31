@@ -37,27 +37,27 @@ class NaiveBayes:
         return np.concatenate(([label_idx], char_count))
 
     def fit(self, data):
-        label_count = np.zeros(len(self.labels))
-        char_count_by_label = np.zeros((len(self.labels), len(self.characters)))
+        self.label_count = np.zeros(len(self.labels))
+        self.char_count_by_label = np.zeros((len(self.labels), len(self.characters)))
 
         for d in data:
             label_idx = d[0]
-            label_count[label_idx] += 1
+            self.label_count[label_idx] += 1
 
-            char_count_by_label[label_idx, :] += d[1:]
+            self.char_count_by_label[label_idx, :] += d[1:]
 
         if self.use_smoothing:
-            label_count += self.smooth_param
+            self.label_count += self.smooth_param
 
         # prior
-        self.label_prob = label_count / np.sum(label_count)
+        self.label_prob = self.label_count / np.sum(self.label_count)
 
         if self.use_smoothing:
             for label_idx in range(len(self.labels)):
-                char_count_by_label[label_idx, :] += self.smooth_param
+                self.char_count_by_label[label_idx, :] += self.smooth_param
 
-        char_sum = np.sum(char_count_by_label, axis=1)
-        self.char_prob = char_count_by_label / char_sum.reshape(-1, 1)
+        char_sum = np.sum(self.char_count_by_label, axis=1)
+        self.char_prob = self.char_count_by_label / char_sum.reshape(-1, 1)
 
     def predict_by_file(self, file_path):
         X_test = self.file_to_characters(file_path)
@@ -81,5 +81,4 @@ class NaiveBayes:
                     probs[label_idx] *= self.char_prob[label_idx, char_idx] ** char_num
 
         pred = self.labels[np.argmax(probs)]
-        print(f"probs: {probs}, pred: {pred}")
         return pred
