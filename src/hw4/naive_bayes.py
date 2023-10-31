@@ -46,11 +46,15 @@ class NaiveBayes:
 
             char_count_by_label[label_idx, :] += d[1:]
 
-        if (self.use_smoothing):
+        if self.use_smoothing:
             label_count += self.smooth_param
 
         # prior
         self.label_prob = label_count / np.sum(label_count)
+
+        if self.use_smoothing:
+            for label_idx in range(len(self.labels)):
+                char_count_by_label[label_idx, :] += self.smooth_param
 
         char_sum = np.sum(char_count_by_label, axis=1)
         self.char_prob = char_count_by_label / char_sum.reshape(-1, 1)

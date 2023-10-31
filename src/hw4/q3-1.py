@@ -5,7 +5,6 @@ import os
 
 def main():
     characters = [" "] + [chr(i) for i in range(ord("a"), ord("z") + 1)]
-    labels = ["English", "Spanish", "Japanese"]
     short_labels = ["e", "s", "j"]
     data_dir = "./data/"
     train_files = (
