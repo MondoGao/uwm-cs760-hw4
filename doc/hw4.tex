@@ -329,7 +329,7 @@ We will be using a character-based multinomial Naïve Bayes model.  You need to 
 			      \hat p(y \mid x) = \hat p(y) \cdot \prod_{i=1}^d \hat p(x_i \mid y)
 			      =\hat p(y) \cdot  \prod_{i=1}^d \theta_{i, y}^{x_i}
 		      \]
-					Shuffling the order of the characters will not affect the value of $x_i$. Therefore, the prediction will not be affected.
+		      Shuffling the order of the characters will not affect the value of $x_i$. Therefore, the prediction will not be affected.
 	      \end{soln}
 
 \end{enumerate}
@@ -349,6 +349,10 @@ Suppose $x \in \mathbb{R}^d$, $W_1 \in \mathbb{R}^{d_1 \times d}$, and $W_2 \in 
 
 \begin{enumerate}
 	\item Derive backpropagation updates for the above neural network. (5 pts)
+
+	      \begin{soln}
+	      \end{soln}
+
 	\item Implement it in NumPy or PyTorch using basic linear algebra operations. (e.g. You are not allowed to use auto-grad, built-in optimizer, model, etc. in this step. You can use library functions for data loading, processing, etc.). Evaluate your implementation on MNIST dataset, report test errors and learning curve. (10 pts)
 	\item Implement the same network in PyTorch (or any other framework). You can use all the features of the framework e.g. auto-grad etc. Evaluate it on MNIST dataset, report test errors, and learning curve. (2 pts)
 	\item Try different weight initialization a) all weights initialized to 0, and b) initialize the weights randomly between -1 and 1. Report test error and learning curves for both. (You can use either of the implementations) (3 pts)
