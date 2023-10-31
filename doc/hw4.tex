@@ -221,9 +221,10 @@ We will be using a character-based multinomial Naïve Bayes model.  You need to 
 
 	      \begin{soln}
 		      By using additive smoothing, we add $\frac{1}{2}$ to each count.\\
-					And also because we use same number of training data for each language, we have
+		      And also because we use same number of training data for each language, we have\\\\
+		      Let $b_i$ be the number of training data for language $i,\ i \in \{e, j, s\}$.
 		      \begin{align*}
-			      \hat p(y=e) = \hat p(y=j)= \hat p(y=s) & = \frac{b_i + \alpha}{\sum_{i=1}^{k}b_k + \alpha K} \\
+			      \hat p(y=e) = \hat p(y=j)= \hat p(y=s) & = \frac{b_i + \alpha}{\sum_{j=1}^{3}b_j + \alpha K} \\
 			                                             & =  \frac{10+\frac{1}{2}}{30 + \frac{1}{2} \times 3} \\
 			                                             & = \frac{1}{3}
 		      \end{align*}
@@ -242,6 +243,11 @@ We will be using a character-based multinomial Naïve Bayes model.  You need to 
 	      Print $\theta_e$ and include in final report which is a vector with 27 elements.
 
 	      \begin{soln}
+		      Let $b_{ei}$ be the number of character $i$ in English training data. $K$ be the number of features(27)\\
+		      Then we have
+		      \begin{align*}
+			      \hat p(c_i \mid y=e) & = \frac{b_{ei} + \alpha}{\sum_{j=1}^{k}b_{ej} + \alpha K} \\
+		      \end{align*}
 		      \begin{figure}[h]
 			      \centering
 			      \includegraphics[width=0.7\textwidth]{img/q3_2.png}

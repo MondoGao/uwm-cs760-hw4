@@ -4,7 +4,8 @@ import os
 
 
 def main():
-    characters = [" "] + [chr(i) for i in range(ord("a"), ord("z") + 1)]
+    # differ from 1, move space to end
+    characters = [chr(i) for i in range(ord("a"), ord("z") + 1)] + [" "]
     labels = ["e", "s", "j"]
     data_dir = "./data/"
     train_files = (
