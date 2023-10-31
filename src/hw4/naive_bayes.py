@@ -8,6 +8,8 @@ class NaiveBayes:
     characters: list[str]
     labels: list[str]
     use_log_prob: bool = True
+    use_smoothing: bool = True
+    smooth_param: float = 1/2
     data: np.ndarray = field(default=None, init=False)
 
     def load_and_train(self, files: list[str]):
@@ -44,6 +46,9 @@ class NaiveBayes:
 
             char_count_by_label[label_idx, :] += d[1:]
 
+        if (self.use_smoothing):
+            label_count += self.smooth_param
+
         # prior
         self.label_prob = label_count / np.sum(label_count)
 
@@ -54,7 +59,6 @@ class NaiveBayes:
         X_test = self.file_to_characters(file_path)
         return self.predict(X_test=X_test[1:])
 
-    # Define the prediction function
     def predict(self, X_test):
         probs = np.zeros(len(self.labels))
 
@@ -64,6 +68,7 @@ class NaiveBayes:
                 probs[label_idx] = np.log(probs[label_idx])
 
             for char_idx, char_num in enumerate(X_test):
+                # multinomial
                 if self.use_log_prob:
                     probs[label_idx] += char_num * np.log(
                         self.char_prob[label_idx, char_idx]
