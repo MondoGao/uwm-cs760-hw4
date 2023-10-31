@@ -14,8 +14,10 @@ def main():
         + [f"{data_dir}{short_labels[2]}{x}.txt" for x in range(0, 10)]
     )
 
-    nb = NaiveBayes(characters=characters, labels=short_labels)
+    nb = NaiveBayes(characters=characters, labels=short_labels, use_log_prob=True)
     nb.load_and_train(files=train_files)
+    X_test = nb.file_to_characters(f"{data_dir}e10.txt")
+    nb.predict(X_test=X_test[1:])
 
 
 if __name__ == "__main__":

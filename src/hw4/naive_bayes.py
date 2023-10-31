@@ -7,15 +7,16 @@ from dataclasses import dataclass, field
 class NaiveBayes:
     characters: list[str]
     labels: list[str]
+    use_log_prob: bool = True
     data: np.ndarray = field(default=None, init=False)
 
     def load_and_train(self, files: list[str]):
         self.data = np.array(
-            [self._file_to_characters(file_path) for file_path in files]
+            [self.file_to_characters(file_path) for file_path in files]
         )
         self.fit(self.data)
 
-    def _file_to_characters(self, file_path):
+    def file_to_characters(self, file_path):
         """
         Loads data file and transforms to charactor vector.
         Returns [label_idx, space_count, a_count, ..., z_count]
@@ -43,10 +44,27 @@ class NaiveBayes:
             char_count_by_label[label_idx, :] += d[1:]
 
         # prior
-        label_prob = label_count / np.sum(label_count)
-        char_prob = char_count_by_label / np.sum(char_count_by_label, axis=0)
-        print({"a":label_prob, "b": char_prob})
+        self.label_prob = label_count / np.sum(label_count)
+        self.char_prob = char_count_by_label / np.sum(char_count_by_label, axis=0)
 
     # Define the prediction function
-    def predict(self, document):
-        pass
+    def predict(self, X_test):
+        probs = np.zeros(len(self.labels))
+
+        for label_idx, label in enumerate(self.labels):
+            # if self.use_log_prob:
+            # probs[label_idx] = np.sum(
+            #     X_test * np.log(self.char_prob[label_idx, :])
+            #     + (1 - X_test) * np.log(1 - self.char_prob[label_idx, :])
+            # ) + np.log(self.label_prob[label_idx])
+            # else:
+            probs[label_idx] = (
+                np.prod(
+                    X_test * self.char_prob[label_idx, :]
+                    + (1 - X_test) * (1 - self.char_prob[label_idx, :])
+                )
+                * self.label_prob[label_idx]
+            )
+
+        print(probs)
+        return probs
