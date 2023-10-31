@@ -9,7 +9,7 @@ class NaiveBayes:
     labels: list[str]
     use_log_prob: bool = True
     use_smoothing: bool = True
-    smooth_param: float = 1/2
+    smooth_param: float = 1 / 2
     data: np.ndarray = field(default=None, init=False)
 
     def load_and_train(self, files: list[str]):
@@ -64,13 +64,13 @@ class NaiveBayes:
         return self.predict(X_test=X_test[1:])
 
     def predict(self, X_test):
-        probs = np.zeros(len(self.labels))
+        # multiply / add prior after, needed by q
+        probs = np.full((len(self.labels)), 1)
+        if self.use_log_prob:
+            probs = np.zeros((len(self.labels)))
 
+        self.likelihood = np.zeros(len(self.labels))
         for label_idx, label in enumerate(self.labels):
-            probs[label_idx] = self.label_prob[label_idx]
-            if self.use_log_prob:
-                probs[label_idx] = np.log(probs[label_idx])
-
             for char_idx, char_num in enumerate(X_test):
                 # multinomial
                 if self.use_log_prob:
@@ -80,5 +80,13 @@ class NaiveBayes:
                 else:
                     probs[label_idx] *= self.char_prob[label_idx, char_idx] ** char_num
 
+            self.likelihood[label_idx] = probs[label_idx]
+
+            if self.use_log_prob:
+                probs[label_idx] += np.log(self.label_prob[label_idx])
+            else:
+                probs[label_idx] *= self.label_prob[label_idx]
+
+        self.predict_probs = probs
         pred = self.labels[np.argmax(probs)]
         return pred
